@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Object Counter</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        /* Background and basic page styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #2c3e50; /* Dark blue background */
+            color: #ecf0f1; /* Light gray text */
+            overflow: hidden; /* Prevent scrollbars from appearing */
+            position: relative;
+        }
+
+        /* Animated background design */
+        .background-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0; /* Place behind the counter content */
+        }
+        .background-circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+            animation: animate 25s linear infinite;
+            bottom: -150px; /* Start from below the screen */
+        }
+        .background-circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .background-circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .background-circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .background-circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .background-circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .background-circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .background-circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .background-circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .background-circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .background-circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes animate {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* Main counter container */
+        .container {
+            z-index: 1; /* Place on top of the background */
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 90%;
+            transition: all 0.3s ease-in-out;
+            transform: scale(1);
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        #counter-value {
+            font-size: 5em;
+            font-weight: bold;
+            color: #3498db; /* Blue for the counter number */
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            transition: transform 0.2s ease-out;
+            display: inline-block;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-reset {
+            background-color: #e74c3c;
+        }
+        
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <ul class="background-circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <div class="container">
+        <h1>Object Counter</h1>
+        <div id="counter-value">0</div>
+        <div class="button-group">
+            <button class="btn" id="decrement-btn">-</button>
+            <button class="btn" id="increment-btn">+</button>
+            <button class="btn btn-reset" id="reset-btn">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // Get references to the HTML elements
+        const counterValueElement = document.getElementById('counter-value');
+        const incrementButton = document.getElementById('increment-btn');
+        const decrementButton = document.getElementById('decrement-btn');
+        const resetButton = document.getElementById('reset-btn');
+
+        // Initialize the counter
+        let count = 0;
+
+        // Function to update the counter display with a little animation
+        function updateCounterDisplay(newCount) {
+            // Apply a scale transform to the number for a "pop" effect
+            counterValueElement.style.transform = 'scale(1.2)';
+
+            // Update the text content
+            counterValueElement.textContent = newCount;
+
+            // Remove the transform after a short delay to return to normal size
+            setTimeout(() => {
+                counterValueElement.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        // Add event listeners to the buttons
+        incrementButton.addEventListener('click', () => {
+            count++;
+            updateCounterDisplay(count);
+        });
+
+        decrementButton.addEventListener('click', () => {
+            if (count > 0) { // Prevent negative numbers
+                count--;
+                updateCounterDisplay(count);
+            }
+        });
+
+        resetButton.addEventListener('click', () => {
+            count = 0;
+            updateCounterDisplay(count);
+        });
+    </script>
+
+</body>
+</html>
